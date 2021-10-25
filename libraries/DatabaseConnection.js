@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const mongodb_connection_string = 'mongodb://user_meetups_course:user_meetups_course_password@cluster0-shard-00-00.j3c7p.mongodb.net:27017,cluster0-shard-00-01.j3c7p.mongodb.net:27017,cluster0-shard-00-02.j3c7p.mongodb.net:27017/meetups?ssl=true&replicaSet=atlas-3rhyxh-shard-0&authSource=admin&retryWrites=true&w=majority';
+const mongodb_connection_string = `mongodb://${ process.env.DB_USER }:${ process.env.DB_PASS }@cluster0-shard-00-00.j3c7p.mongodb.net:27017,cluster0-shard-00-01.j3c7p.mongodb.net:27017,cluster0-shard-00-02.j3c7p.mongodb.net:27017/${ process.env.DB_NAME }?ssl=true&replicaSet=atlas-3rhyxh-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
 class DatabaseConnection {
   static instance = new DatabaseConnection();
@@ -10,7 +10,7 @@ class DatabaseConnection {
 
       const client = await MongoClient.connect( mongodb_connection_string );
       const db = client.db();
-      const meetupsCollection = db.collection('meetups');
+      const meetupsCollection = db.collection( process.env.DB_COLLECTION_NAME );
       return { meetupsCollection, client };
 
     } catch ( err ) {
