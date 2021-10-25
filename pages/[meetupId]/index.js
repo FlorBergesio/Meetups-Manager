@@ -33,7 +33,7 @@ export async function getStaticPaths() {
   DatabaseConnection.instance.endConnection( client );
 
   return {
-    fallback: false,
+    fallback: 'blocking', // or true ( for immediately generating an empty page and setting the content afterwards )
     paths: meetups.map( meetup => ({
       params: {
         meetupId: meetup._id.toString()
