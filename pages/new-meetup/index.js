@@ -15,7 +15,9 @@ const NewMeetupPage = () => {
 
     const data = await response.json();
 
-    router.push('/');
+    if ( data.status === 201 ) {
+      router.push('/');
+    }
   };
 
   return (

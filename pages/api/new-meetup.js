@@ -18,9 +18,15 @@ async function handler( req, res ) {
 
       client.close();
 
-      res.status(201).json({ message: "Meetup inserted!" });
+      res.status(201).json({ 
+        status: 201,
+        message: "Meetup inserted!" 
+      });
     } catch ( error ) {
-      res.status(500).json({ message: "An error occurred!" });
+      res.status(500).json({ 
+        status: 500,
+        message: "An error occurred!" 
+      });
     }
   }
 }
