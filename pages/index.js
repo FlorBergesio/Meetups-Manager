@@ -1,10 +1,20 @@
+import Head from 'next/head';
 import DatabaseConnection from '../libraries/DatabaseConnection';
 
 import MeetupList from '../components/meetups/MeetupList';
 
 const HomePage = ( props ) => {
   return (
-    <MeetupList meetups={ props.meetups } />
+    <>
+      <Head>
+        <title>Meetup manager</title>
+        <meta 
+          name="description" 
+          content="Browse all active meetups" 
+        />
+      </Head>
+      <MeetupList meetups={ props.meetups } />
+    </>
   );
 };
 
