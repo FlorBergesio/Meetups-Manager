@@ -1,4 +1,5 @@
-import { MongoClient, ObjectId } from 'mongodb';
+import DatabaseConnection from '../../libraries/DatabaseConnection';
+import { ObjectId } from 'mongodb';
 
 import MeetupDetail from "../../components/meetups/MeetupDetail";
 
@@ -14,14 +15,11 @@ const MeetupDetails = ( props ) => {
 }
 
 export async function getStaticPaths() {
-  const mongodb_connection_string = 'mongodb://user_meetups_course:user_meetups_course_password@cluster0-shard-00-00.j3c7p.mongodb.net:27017,cluster0-shard-00-01.j3c7p.mongodb.net:27017,cluster0-shard-00-02.j3c7p.mongodb.net:27017/meetups?ssl=true&replicaSet=atlas-3rhyxh-shard-0&authSource=admin&retryWrites=true&w=majority';
-  const client = await MongoClient.connect( mongodb_connection_string );
-  const db = client.db();
-  const meetupsCollection = db.collection('meetups');
+  const { meetupsCollection, client } = await DatabaseConnection.instance.startConnection();
 
   const meetups = await meetupsCollection.find( {/* filter criteria */}, { _id: 1 }).toArray();
 
-  client.close();
+  DatabaseConnection.instance.endConnection( client );
 
   return {
     fallback: false,
@@ -36,16 +34,13 @@ export async function getStaticPaths() {
 export async function getStaticProps( context ) {
   const meetupId = context.params.meetupId;
 
-  const mongodb_connection_string = 'mongodb://user_meetups_course:user_meetups_course_password@cluster0-shard-00-00.j3c7p.mongodb.net:27017,cluster0-shard-00-01.j3c7p.mongodb.net:27017,cluster0-shard-00-02.j3c7p.mongodb.net:27017/meetups?ssl=true&replicaSet=atlas-3rhyxh-shard-0&authSource=admin&retryWrites=true&w=majority';
-  const client = await MongoClient.connect( mongodb_connection_string );
-  const db = client.db();
-  const meetupsCollection = db.collection('meetups');
+  const { meetupsCollection, client } = await DatabaseConnection.instance.startConnection();
 
   const selectedMeetup = await meetupsCollection.findOne({
     _id: ObjectId(meetupId),
   });
 
-  client.close();
+  DatabaseConnection.instance.endConnection( client );
 
   return {
     props: {
